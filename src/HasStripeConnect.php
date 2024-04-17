@@ -2,12 +2,12 @@
 
 namespace Merchant;
 
-use App\Actions\StripeConnect\CreateStripeAccount;
-use App\Actions\StripeConnect\CreateStripeAccountLink;
-use App\Support\StripeApi;
+use Merchant\Actions\CreateStripeAccount;
+use Merchant\Actions\CreateStripeAccountLink;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Stripe\StripeClient;
 
 /**
  * Trait for decorating a model with Stripe Connect features
@@ -30,17 +30,19 @@ trait HasStripeConnect
 
     protected function stripe()
     {
-        return StripeApi::run();
+        return new StripeClient([
+            'api_key' => config('services.stripe.secret'),
+            'stripe_version' => config('services.stripe.version', '2023-10-16'),
+        ]);
     }
 
     public function createStripeAccount(string $email, string $country): self
     {
-        tap(CreateStripeAccount::run(
+        CreateStripeAccount::run(
+            merchant: $this,
             email: $email,
             country: $country
-        ), fn ($acct) => (
-            $this->update(['stripe_account_id' => $acct->id])
-        ));
+        );
 
         return $this;
     }
@@ -48,6 +50,7 @@ trait HasStripeConnect
     public function newAccountLinkUrl(string $returnUrl, string $refreshUrl): string
     {
         $stripeAccountLink = CreateStripeAccountLink::run(
+            merchant: $this,
             stripeAccountId: $this->stripe_account_id,
             returnUrl: $returnUrl,
             refreshUrl: $refreshUrl
