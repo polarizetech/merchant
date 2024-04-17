@@ -12,8 +12,6 @@ class RetrieveStripeAccount
 
     public function handle(mixed $merchant, ?array $data): array
     {
-        $merchant = $merchant;
-
         $stripeAccountData = (
             collect($merchant->stripeAccount()->toArray())->only([
                 'capabilities',
