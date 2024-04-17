@@ -6,7 +6,7 @@ use App\Models\Merchant;
 use App\Support\StripeApi;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class ShopStripeAccountDetails
+class RetrieveStripeAccount
 {
     use AsAction;
 
