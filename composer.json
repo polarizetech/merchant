@@ -1,7 +1,7 @@
 {
   "name": "polarizetech/merchant",
   "description": "Marketplace payments support for Laravel (via Stripe Connect)",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "authors": [
       {

@@ -2,8 +2,6 @@
 
 namespace Merchant\Actions;
 
-use App\Models\Merchant;
-use App\Support\StripeApi;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class RetrieveStripeAccount
@@ -26,7 +24,7 @@ class RetrieveStripeAccount
             ])
         );
 
-        $stripeClient = (new Merchant)->stripe();
+        $stripeClient = $merchant->stripe();
 
         $stripePayoutAmount = collect($stripeClient->payouts->all(['limit' => 100])?->data);
         $stripePayoutAmount = $stripePayoutAmount->count() > 0 ? dollars($stripePayoutAmount->sum('amount')) : 0;

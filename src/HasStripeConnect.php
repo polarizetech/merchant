@@ -14,7 +14,7 @@ use Stripe\StripeClient;
  */
 trait HasStripeConnect
 {
-    public static function bootedMerchantable(): void
+    public static function bootedHasStripeConnect(): void
     {
         static::deleting(fn ($merchant) => (
             $merchant->deleteStripeAccount()
@@ -28,7 +28,7 @@ trait HasStripeConnect
         );
     }
 
-    protected function stripe()
+    public function stripe()
     {
         return new StripeClient([
             'api_key' => config('services.stripe.secret'),
