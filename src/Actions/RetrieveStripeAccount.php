@@ -8,7 +8,12 @@ class RetrieveStripeAccount
 {
     use AsAction;
 
-    public function handle(mixed $merchant, ?array $data): array
+    /**
+     * Retrieve the Stripe account details for the given merchant.
+     * @param mixed $merchant
+     * @param array|null $data
+     */
+    public function handle(mixed $merchant, ?array $data = []): array
     {
         $stripeAccountData = (
             collect($merchant->stripeAccount()->toArray())->only([

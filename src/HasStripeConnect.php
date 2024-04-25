@@ -38,11 +38,14 @@ trait HasStripeConnect
 
     public function createStripeAccount(string $email, string $country): self
     {
-        CreateStripeAccount::run(
+        $stripeAccount = CreateStripeAccount::run(
             merchant: $this,
             email: $email,
             country: $country
         );
+
+        $this->stripe_account_id = $stripeAccount->id;
+        $this->save();
 
         return $this;
     }
