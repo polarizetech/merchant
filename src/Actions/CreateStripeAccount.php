@@ -4,7 +4,12 @@ namespace Merchant\Actions;
 
 class CreateStripeAccount
 {
-    public static function run(mixed $merchant, string $email, string $country): \Stripe\Account
+    public static function run(
+        mixed $merchant,
+        string $email,
+        string $country,
+        ?array $capabilities = []
+    ): \Stripe\Account
     {
         $stripe = $merchant->stripe();
 
@@ -13,8 +18,8 @@ class CreateStripeAccount
             'country' => $country,
             'email' => $email,
             'capabilities' => [
-                'transfers' => ['requested' => true],
                 'card_payments' => ['requested' => true],
+                ...$capabilities
             ],
             'settings' => [
                 'payouts' => [
